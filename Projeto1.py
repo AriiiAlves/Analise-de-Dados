@@ -1,9 +1,9 @@
-# projeto 1: ler um dicionário com vários dados de uma pessoa, e fazer gráficos de estatísticas com múltiplos desses dados, 
+# projeto 1: ler um dicionário com vários dados de uma pessoa, e fazer gráficos de estatísticas com múltiplos desses dados,
 # que são todos salvos em um único arquivo pdf como relatório
 
-# estatísticas: 
-#   quantidade de M e F, 
-#   média de idades, 
+# estatísticas:
+#   quantidade de M e F,
+#   média de idades,
 #   quantidade de pessoas jovens, adultas e idosas,
 #   quantidade de pessoas por estado,
 #   quantidade de pessoas por estado civil,
@@ -12,9 +12,11 @@
 # Dados da pessoa: nome, sexo, idade, cidade, estado, estado civil
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
-temp1 = temp2 = temp3 = temp4 = 0
-dicionario = {}
+temp1, temp2, temp3, temp4 = 0, 0, 0, 0
+dicionario, var1, var2 = {}, {}, {}
+labels, lista = [], []
 
 # Dicionário de dados
 pessoas = [
@@ -52,7 +54,7 @@ pessoas = [
 
 pessoas_df = pd.DataFrame(pessoas)
 
-# Total de homens e total de mulheres
+## Total de homens e total de mulheres ##
 
 for i in range(0, pessoas_df.shape[0]):
     if pessoas_df.loc[i, 'Sexo'] == 'Masculino':
@@ -60,33 +62,101 @@ for i in range(0, pessoas_df.shape[0]):
     elif pessoas_df.loc[i, 'Sexo'] == 'Feminino':
         temp2 += 1
 
-print(f"M: {temp1}, F: {temp2}")
+# Gerando gráfico
 
-temp1 = temp2 = 0
+labels = ['Masculino', 'Feminino']
+var1 = [temp1, temp2]
 
-# Média idades
+# fig: manipula figura
+# ax: manipula gráfico
+
+fig, ax = plt.subplots(figsize=(5, 5))
+ax.bar(labels, var1, color=['#3489eb', '#eb4034'])
+plt.axis(ymax = max(var1) + 1)
+ax.set_title('Quantidade de pessoas por gênero')
+ax.set_ylabel("Quantidade")
+ax.set_xlabel('Gênero')
+plt.show()
+
+temp1, temp2 = 0, 0
+labels.clear()
+
+## Média de idades e quantidade por idade ## (falta fazer alguma coisa com isso aqui)
 for i in range(0, pessoas_df.shape[0]):
     temp1 += pessoas_df.loc[i, 'Idade']
 temp1 /= pessoas_df.shape[0]
 
-print(f"Idade média: {temp1}")
+# print(f"Idade média: {round(temp1)}")
 
 temp1 = 0
 
-# Quantidade de idades por grupos
+## Quantidade de pessoas por idade ##
+for i in range(0, pessoas_df.shape[0]):
+    if pessoas_df.loc[i, 'Idade'] not in lista:
+        lista.append(pessoas_df.loc[i, 'Idade'])
+lista.sort()
+
+for i in lista:
+    dicionario[i] = 0
+lista.clear()
+
+for i in range(0, pessoas_df.shape[0]):
+    dicionario[pessoas_df.loc[i, 'Idade']] += 1
+
+# Gerando gráfico
+
+for i in dicionario:
+    labels.append(i)
+for i in dicionario:
+    lista.append(dicionario[i])
+
+# fig: manipula figura
+# ax: manipula gráfico
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.bar(labels, lista)
+plt.xticks(range(min(labels), max(labels) + 1))
+plt.yticks(range(min(lista), max(lista) + 1))
+ax.set_title('Quantidade de pessoas por idade')
+ax.set_xlabel('Idade')
+ax.set_ylabel("Número de pessoas")
+plt.show()
+
+temp1 = 0
+labels.clear()
+lista.clear()
+dicionario.clear()
+
+## Quantidade de idades por grupos ##
 for i in range(0, pessoas_df.shape[0]):
     if pessoas_df.loc[i, 'Idade'] >= 0 and pessoas_df.loc[i, 'Idade'] < 20:
-        temp1 += pessoas_df.loc[i, 'Idade']
+        temp1 += 1
     elif pessoas_df.loc[i, 'Idade'] >= 20 and pessoas_df.loc[i, 'Idade'] < 60:
-        temp2 += pessoas_df.loc[i, 'Idade']
+        temp2 += 1
     elif pessoas_df.loc[i, 'Idade'] >= 60:
-        temp3 += pessoas_df.loc[i, 'Idade']
+        temp3 += 1
 
-print(f"Jovens: {temp1}, Adultos: {temp2}, Idosos: {temp3}")
+# Gerando gráfico
 
-temp1 = temp2 = temp3 = 0
+labels = ['Jovens', 'Adultos', 'Idosos']
+lista = [temp1, temp2, temp3]
 
-# Quantidade de pessoas por estado
+# fig: manipula figura
+# ax: manipula gráfico
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.bar(labels, lista)
+plt.axis(ymax = max(lista) + 10)
+ax.set_title('Quantidade de pessoas por faixa etária')
+ax.set_xlabel('Faixa etária')
+ax.set_ylabel("Número de pessoas")
+plt.show()
+
+temp1, temp2, temp3 = 0, 0, 0
+labels.clear()
+lista.clear()
+
+## Quantidade de pessoas por estado ##
 for i in range(0, pessoas_df.shape[0]):
     if pessoas_df.loc[i, 'Estado'] not in dicionario.keys():
         for j in range(0, pessoas_df.shape[0]):
@@ -95,25 +165,60 @@ for i in range(0, pessoas_df.shape[0]):
         dicionario[f"{pessoas_df.loc[i, 'Estado']}"] = temp1
         temp1 = 0
 
-print(dicionario)
+# Gerando gráfico
+
+for i in dicionario:
+    labels.append(i)
+    lista.append(dicionario[i])
+
+# fig: manipula figura
+# ax: manipula gráfico
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.bar(labels, lista)
+plt.axis(ymax = max(lista) + 1)
+ax.set_title('Quantidade de pessoas por estado')
+ax.set_xlabel('Estado')
+ax.set_ylabel("Número de pessoas")
+plt.show()
 
 temp1 = 0
 dicionario.clear()
+labels.clear()
+lista.clear()
 
-# Quantidade de pessoas por estado civil
+## Quantidade de pessoas por estado civil ##
 for i in range(0, pessoas_df.shape[0]):
     if pessoas_df.loc[i, 'Estado Civil'] == 'Solteiro(a)':
         temp1 += 1
-    elif pessoas_df.loc[i, 'Estado Civil'] == 'Divorciado(a)':
+    elif pessoas_df.loc[i, 'Estado Civil'] == 'Casado(a)':
         temp2 += 1
-    elif pessoas_df.loc[i, 'Estado Civil'] == 'Viúvo(a)':
+    elif pessoas_df.loc[i, 'Estado Civil'] == 'Divorciado(a)':
         temp3 += 1
+    elif pessoas_df.loc[i, 'Estado Civil'] == 'Viúvo(a)':
+        temp4 += 1
 
-print(f"Solteiro(a): {temp1}, Divorciado(a): {temp2}, Viúvo(a): {temp3}")
+# Gerando gráfico
 
-temp1 = temp2 = temp3 = 0
+labels = ['Solteiro(a)', 'Casado(a)', 'Divorciado(a)', 'Viúvo']
+lista = [temp1, temp2, temp3, temp4]
 
-# Número de pessoas por cidade
+# fig: manipula figura
+# ax: manipula gráfico
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.bar(labels, lista)
+plt.axis(ymax = max(lista) + 1)
+ax.set_title('Quantidade de pessoas por estado civil')
+ax.set_xlabel('Estado civil')
+ax.set_ylabel("Número de pessoas")
+plt.show()
+
+temp1, temp2, temp3, temp4 = 0, 0, 0, 0
+labels.clear()
+lista.clear()
+
+## Número de pessoas por cidade ##
 for i in range(0, pessoas_df.shape[0]):
     if pessoas_df.loc[i, 'Cidade'] not in dicionario.keys():
         for j in range(0, pessoas_df.shape[0]):
@@ -122,9 +227,24 @@ for i in range(0, pessoas_df.shape[0]):
         dicionario[f"{pessoas_df.loc[i, 'Cidade']}"] = temp1
         temp1 = 0
 
-print(dicionario)
+# Gerando gráfico
+
+for i in dicionario:
+    labels.append(i)
+    lista.append(dicionario[i])
+
+# fig: manipula figura
+# ax: manipula gráfico
+
+fig, ax = plt.subplots(figsize=(5, 10))
+ax.barh(labels, lista, lw = 5)
+plt.axis(xmax = max(lista) + 1)
+ax.set_title('Quantidade de pessoas por cidade')
+ax.set_xlabel('Número de pessoas')
+ax.set_ylabel("Cidade")
+plt.show()
 
 temp1 = 0
 dicionario.clear()
-
-# a pesquisa de dados está pronta, só falta gerar os gráficos com matplotlib
+labels.clear()
+lista.clear()
