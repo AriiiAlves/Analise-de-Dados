@@ -226,5 +226,4 @@ class AnalysisGraphics:
             return(set_range)
 
     ## def GeneratePDF(self):
-
     ## o pdf vai conter uma tabela com todos os dados, e os gráficos estatísticos gerados
