@@ -1,38 +1,39 @@
 from fpdf import FPDF
+from datetime import datetime
+from PIL import Image
 
-class PDF(FPDF):
-    def TitlePage(self, title = "", subtitle = ""):
-        # 
-        self.add_page()
-        # Colocando fonte: Times new roman em negrito tamanho 16
+class modelPDF(FPDF):
+    def header(self):
+        # Colocando fonte: Times new roman em negrito tamanho 12
         self.set_font("Times", "B", 12)
-        # Imprimindo título
-        self.multi_cell(0, 9, title.upper(), align="C", border=1)
-        # Quebra de linha
-        self.ln(0)
+        # Imprimindo número da página
+        self.cell(0, 7, f"Relatório {datetime.now().strftime("%d/%m/%Y %H:%M")} -  AlvzDev", align="C")
+        self.ln(20)
 
-        # Colocando fonte: Times new roman normal tamanho 14
+    def footer(self):
+        # Colocando fonte: Times new roman em negrito tamanho 12
+        self.set_font("Times", "I", 8)
+        # Posição do cursor de 1.5 cm de distância do fundo:
+        self.set_y(-15)
+        # Imprimindo número da página
+        self.multi_cell(0, 7, f"Página {self.page_no()}", align="C")
+
+    def GraphicBox(self, title, description, image_path):
+        # Colocando fonte: Times new roman em negrito tamanho 12
+        self.set_font("Times", "B", 12)
+        self.cell(0, 7, title.upper())
+        self.ln(10)
+        # Colocando fonte: Times new roman normal tamanho 12
         self.set_font("Times", "", 12)
-        # Imprimindo subtítulo
-        self.multi_cell(0, 7, subtitle.upper(), align="C", border=1)
+        self.multi_cell(0, 7, description)
+        self.ln(10)
 
-        # Falta texto de baixo (data) e texto de cima (alvzdevelopment / análise de dados)
+        img_width, img_height = Image.open(image_path).size
 
-    def Title():
-        return()
-    def Subtitle():
-        return()
-    def Summary():
-        return()
-    def l1Title():
-        return()
-    def l2Title():
-        return()
-    def l3Title():
-        return()
+        if img_width > self.w // 1.5 or img_height > self.h:
+            while(img_width > self.w // 1.5 or img_height > self.h):
+                img_width = int(img_width * 0.9)
+                img_height = int(img_height * 0.9)
 
-text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque libero velit, ultrices eget suscipit non, sagittis vitae orci. Cras quis nisl nunc. Vestibulum venenatis tellus at pellentesque luctus. Phasellus ullamcorper condimentum tellus fringilla euismod. Donec mi enim, ultrices feugiat tincidunt id, tristique tincidunt nibh. Fusce consequat dapibus elit, a commodo velit. Maecenas posuere augue nec suscipit lacinia. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean mollis elementum nisl imperdiet ornare. Fusce a maximus elit. Curabitur et lorem ac nisl ultricies feugiat."
-
-pdf = PDF()
-pdf.TitlePage(title="PDF archive test", subtitle="Testing the fpdf2 python library")
-pdf.output("Relatório.pdf")
+        self.image(image_path, x=(self.w - img_width) // 2, w=img_width, h=img_height)
+        self.ln(10)

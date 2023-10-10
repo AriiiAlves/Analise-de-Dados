@@ -1,5 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from pdfControls import modelPDF
+from datetime import datetime
+from os import path, makedirs
 
 class AnalysisGraphics:
     def __init__(self, datadict):
@@ -225,5 +228,26 @@ class AnalysisGraphics:
                 set_range.append(i)
             return(set_range)
 
-    ## def GeneratePDF(self):
-    ## o pdf vai conter uma tabela com todos os dados, e os gráficos estatísticos gerados
+    def GeneratePDF(self):
+        #Gera um pdf com todos os gráficos inseridos
+        pdf = modelPDF()
+        pdf.add_page()
+        pdf.GraphicBox("Gráfico 1", "Aparentemente um gráfico qualquer", "temp/genreNumber.png")
+        pdf.GraphicBox("Gráfico 2", "Aparentemente um gráfico qualquer", "temp/numberPerAge.png")
+        pdf.GraphicBox("Gráfico 3", "Aparentemente um gráfico qualquer", "temp/numberPerCity.png")
+        pdf.GraphicBox("Gráfico 4", "Aparentemente um gráfico qualquer", "temp/numberPerCivilState.png")
+        pdf.GraphicBox("Gráfico 5", "Aparentemente um gráfico qualquer", "temp/numberPerGroupAge.png")
+        pdf.GraphicBox("Gráfico 5", "Aparentemente um gráfico qualquer", "temp/numberPerState.png")
+
+        if not path.exists("Analysis PDF's"):
+            # Se não existe, cria o diretório
+            makedirs("Analysis PDF's")
+
+        i = 0
+
+        while(True):
+            if not path.exists(f"Analysis PDF's/Generated Report {datetime.now().strftime("%d-%m-%Y")} {i}.pdf"):
+                pdf.output(f"Analysis PDF's/Generated Report {datetime.now().strftime("%d-%m-%Y")} {i}.pdf")
+                break
+            else:
+                i += 1
