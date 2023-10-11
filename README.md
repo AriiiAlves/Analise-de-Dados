@@ -10,7 +10,7 @@ Frameworks usados:
 - pandas
 - mathplotlib
 - fpdf
-- PIL
+- pillow
 
 # People-Data-Analyzer (en)
 
@@ -24,4 +24,4 @@ Frameworks used:
 - pandas
 - mathplotlib
 - fdpf
-- PIL
+- pillow
