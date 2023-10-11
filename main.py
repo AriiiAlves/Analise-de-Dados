@@ -38,11 +38,4 @@ people = [
     {'Nome': 'Beatriz', 'Sexo': 'Feminino', 'Idade': 37, 'Cidade': 'Campo Grande', 'Estado': 'MS', 'Estado Civil': 'Casado(a)'},
     {'Nome': 'Beatriz', 'Sexo': 'Feminino', 'Idade': 37, 'Cidade': 'Campo Grande', 'Estado': 'MS', 'Estado Civil': 'Casado(a)'}]
 
-AnalysisGraphics(people).genreNumber()
-AnalysisGraphics(people).numberPerAge()
-AnalysisGraphics(people).numberPerGroupAge()
-AnalysisGraphics(people).numberPerState()
-AnalysisGraphics(people).numberPerCivilState()
-AnalysisGraphics(people).numberPerCity()
-
 AnalysisGraphics(people).GeneratePDF()

@@ -8,6 +8,10 @@ class AnalysisGraphics:
     def __init__(self, datadict):
         self.people_df = pd.DataFrame(datadict)
 
+        # Verifica se a pasta dos PDF's e arquivos temporários de imagens dos gráficos já foi criada. Se não, cria uma
+        if not path.exists("Analysis PDF\'s/temp"):
+            makedirs("Analysis PDF\'s/temp")
+
     # Gráfico do número de pessoas por gênero
     def genreNumber(self):
         labels, data = [], []
@@ -32,7 +36,7 @@ class AnalysisGraphics:
         plt.ylabel("Quantidade")
         plt.xlabel('Gênero')
         plt.tight_layout()
-        plt.savefig('temp/genreNumber.png')
+        plt.savefig('Analysis PDF\'s/temp/genreNumber.png')
         plt.clf()
 
     # Função que retorna a idade média de todas as pessoas
@@ -78,7 +82,7 @@ class AnalysisGraphics:
         plt.xlabel('Idade')
         plt.ylabel("Número de pessoas")
         plt.tight_layout()
-        plt.savefig('temp/numberPerAge.png')
+        plt.savefig('Analysis PDF\'s/temp/numberPerAge.png')
         plt.clf()
     
     # Gráfico do número de pessoas por faixa etária
@@ -107,7 +111,7 @@ class AnalysisGraphics:
         plt.xlabel('Faixa etária')
         plt.ylabel("Número de pessoas")
         plt.tight_layout()
-        plt.savefig('temp/numberPerGroupAge.png')
+        plt.savefig('Analysis PDF\'s/temp/numberPerGroupAge.png')
         plt.clf()
     
     # Gráfico do número de pessoas por Estado
@@ -138,7 +142,7 @@ class AnalysisGraphics:
         plt.xlabel('Estado')
         plt.ylabel("Número de pessoas")
         plt.tight_layout()
-        plt.savefig('temp/numberPerState.png')
+        plt.savefig('Analysis PDF\'s/temp/numberPerState.png')
         plt.clf()
 
     # Gráfico do número de pessoas por estado civil
@@ -169,7 +173,7 @@ class AnalysisGraphics:
         plt.xlabel('Estado civil')
         plt.ylabel("Número de pessoas")
         plt.tight_layout()
-        plt.savefig('temp/numberPerCivilState.png')
+        plt.savefig('Analysis PDF\'s/temp/numberPerCivilState.png')
         plt.clf()
     
     # Gráfico do número de pessoas por cidade
@@ -200,7 +204,7 @@ class AnalysisGraphics:
         plt.xlabel('Número de pessoas')
         plt.ylabel("Cidade")
         plt.tight_layout()
-        plt.savefig('temp/numberPerCity.png')
+        plt.savefig('Analysis PDF\'s/temp/numberPerCity.png')
         plt.clf()
     
     # Função que cria uma lista com intervalos de números, utilizados para a visualização (ticks) dos dados do gráfico
@@ -229,25 +233,30 @@ class AnalysisGraphics:
             return(set_range)
 
     def GeneratePDF(self):
+        # Gerando gráficos em png
+        self.genreNumber()
+        self.numberPerAge()
+        self.numberPerGroupAge()
+        self.numberPerState()
+        self.numberPerCivilState()
+        self.numberPerCity()
+
         #Gera um pdf com todos os gráficos inseridos
         pdf = modelPDF()
         pdf.add_page()
-        pdf.GraphicBox("Gráfico 1", "Aparentemente um gráfico qualquer", "temp/genreNumber.png")
-        pdf.GraphicBox("Gráfico 2", "Aparentemente um gráfico qualquer", "temp/numberPerAge.png")
-        pdf.GraphicBox("Gráfico 3", "Aparentemente um gráfico qualquer", "temp/numberPerCity.png")
-        pdf.GraphicBox("Gráfico 4", "Aparentemente um gráfico qualquer", "temp/numberPerCivilState.png")
-        pdf.GraphicBox("Gráfico 5", "Aparentemente um gráfico qualquer", "temp/numberPerGroupAge.png")
-        pdf.GraphicBox("Gráfico 5", "Aparentemente um gráfico qualquer", "temp/numberPerState.png")
+        pdf.GraphicBox("Gráfico de incidência de gêneros", "Aparentemente um gráfico qualquer", "Analysis PDF\'s/temp/genreNumber.png")
+        pdf.GraphicBox("Gráfico de pessoas por idade", "Aparentemente um gráfico qualquer", "Analysis PDF\'s/temp/numberPerAge.png")
+        pdf.GraphicBox("Gráfico de pessoas por cidade", "Aparentemente um gráfico qualquer", "Analysis PDF\'s/temp/numberPerCity.png")
+        pdf.GraphicBox("Gráfico de pessoas por estado civil", "Aparentemente um gráfico qualquer", "Analysis PDF\'s/temp/numberPerCivilState.png")
+        pdf.GraphicBox("Gráfico de pessoas por faixa etária", "Aparentemente um gráfico qualquer", "Analysis PDF\'s/temp/numberPerGroupAge.png")
+        pdf.GraphicBox("Gráfico de pessoas por Estado", "Aparentemente um gráfico qualquer", "Analysis PDF\'s/temp/numberPerState.png")
 
-        if not path.exists("Analysis PDF's"):
-            # Se não existe, cria o diretório
-            makedirs("Analysis PDF's")
-
+        # Diferencia relatórios novos de relatórios já criados
         i = 0
 
         while(True):
-            if not path.exists(f"Analysis PDF's/Generated Report {datetime.now().strftime("%d-%m-%Y")} {i}.pdf"):
-                pdf.output(f"Analysis PDF's/Generated Report {datetime.now().strftime("%d-%m-%Y")} {i}.pdf")
+            if not path.exists(f"Analysis PDF's/Generated Report {datetime.now().strftime('%d-%m-%Y')} {i}.pdf"):
+                pdf.output(f"Analysis PDF's/Generated Report {datetime.now().strftime('%d-%m-%Y')} {i}.pdf")
                 break
             else:
                 i += 1

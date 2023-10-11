@@ -7,7 +7,7 @@ class modelPDF(FPDF):
         # Colocando fonte: Times new roman em negrito tamanho 12
         self.set_font("Times", "B", 12)
         # Imprimindo número da página
-        self.cell(0, 7, f"Relatório {datetime.now().strftime("%d/%m/%Y %H:%M")} -  AlvzDev", align="C")
+        self.cell(0, 7, f"Relatório {datetime.now().strftime('%d/%m/%Y %H:%M')} -  AlvzDev", align="C")
         self.ln(20)
 
     def footer(self):
@@ -22,11 +22,11 @@ class modelPDF(FPDF):
         # Colocando fonte: Times new roman em negrito tamanho 12
         self.set_font("Times", "B", 12)
         self.cell(0, 7, title.upper())
-        self.ln(10)
+        self.ln(8)
         # Colocando fonte: Times new roman normal tamanho 12
         self.set_font("Times", "", 12)
         self.multi_cell(0, 7, description)
-        self.ln(10)
+        self.ln(5)
 
         img_width, img_height = Image.open(image_path).size
 
