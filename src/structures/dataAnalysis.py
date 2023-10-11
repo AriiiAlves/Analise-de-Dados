@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from pdfControls import modelPDF
+from src.structures.pdfControls import modelPDF
 from datetime import datetime
 from os import path, makedirs
 
@@ -49,7 +49,7 @@ class AnalysisGraphics:
 
         # return(temp1)
 
-    # Gráfico do número de pessoas por idade
+    # Gráfico do número de pessoas por idade (TROCAR PRA GRÁFICO DE PIZZA DEPOIS)
     def numberPerAge(self):
         labels, data = [], []
         dictionary = {}

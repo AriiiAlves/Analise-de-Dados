@@ -16,7 +16,7 @@ class modelPDF(FPDF):
         # Posição do cursor de 1.5 cm de distância do fundo:
         self.set_y(-15)
         # Imprimindo número da página
-        self.multi_cell(0, 7, f"Página {self.page_no()}", align="C")
+        self.multi_cell(0, 7, f"Página {self.page_no()} de {{nb}}", align="C")
 
     def GraphicBox(self, title, description, image_path):
         # Colocando fonte: Times new roman em negrito tamanho 12

@@ -1,4 +1,4 @@
-from dataAnalysis import AnalysisGraphics
+from src.structures.dataAnalysis import AnalysisGraphics
 
 # Dicionário de dados
 # Dados de cada pessoa: nome, sexo, idade, cidade, estado e estado civil
